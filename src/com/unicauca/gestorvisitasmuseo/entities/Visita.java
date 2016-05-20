@@ -61,8 +61,6 @@ public class Visita implements Serializable {
 
     public Visita() {
         System.out.println("sdfd");
-        
-        
     }
 
     public Visita(Long id) {
