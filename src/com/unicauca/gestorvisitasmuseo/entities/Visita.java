@@ -6,6 +6,7 @@
 package com.unicauca.gestorvisitasmuseo.entities;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -84,6 +85,28 @@ public class Visita implements Serializable {
     public Date getFecha() {
         return fecha;
     }
+    
+    public String getHoraSimple() {
+        Calendar fechaLista = Calendar.getInstance();
+        fechaLista.setTime(getHora());
+        int h = fechaLista.get(Calendar.HOUR_OF_DAY);
+        
+        String horaAux;
+        if(h<10){
+            horaAux = "0"+h;
+        }else{
+            horaAux = ""+h;
+        }
+        int m = fechaLista.get(Calendar.MINUTE);
+        String minutos;
+        if(m<10){
+            minutos = "0"+m;
+        }else{
+            minutos = ""+m;
+        }
+        
+        return horaAux+":"+minutos;
+    }
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
@@ -91,6 +114,25 @@ public class Visita implements Serializable {
 
     public Date getHora() {
         return hora;
+    }
+    
+    public String getFechaSimple() {
+        Calendar fechaLista = Calendar.getInstance();
+        fechaLista.setTime(this.fecha);
+        int d = fechaLista.get(Calendar.DAY_OF_MONTH);
+        int m = (fechaLista.get(Calendar.MONTH) + 1);
+        String anio = ""+fechaLista.get(Calendar.YEAR);
+        
+        String dia=""+d;
+        if(d<10){
+            dia="0"+d;
+        }
+        String mes=""+m;
+        if(m<10){
+            mes="0"+m;
+        }
+        
+        return dia+"/"+mes+"/"+anio;
     }
 
     public void setHora(Date hora) {
@@ -143,7 +185,7 @@ public class Visita implements Serializable {
 
     @Override
     public String toString() {
-        return "id: "+id+" #: "+numeropersonas+" Tipo: "+tipovisitante+" Fecha: "+fecha+" Hora: "+hora+" Observaciones: "+observaciones;
+        return "Visitantes: "+numeropersonas+" \nTipo: "+tipovisitante+" \nFecha: "+getFechaSimple()+" \nHora: "+getHoraSimple()+" \nObservaciones: "+(observaciones==null?"vacio":observaciones);
     }
     
 }

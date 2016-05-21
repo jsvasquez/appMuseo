@@ -7,6 +7,9 @@ package com.unicauca.gestorvisitasmuseo.presentación;
 
 import com.unicauca.gestorvisitasmuseo.dao.VisitaJpaController;
 import com.unicauca.gestorvisitasmuseo.entities.Visita;
+import com.unicauca.gestorvisitasmuseo.logica.HandlerTable;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -23,16 +26,30 @@ import javax.swing.JOptionPane;
 public class Principal extends javax.swing.JFrame {
 
     EntityManagerFactory factory;
+    VisitaJpaController jpa;
+    HandlerTable controladorTabla;
 
     /**
      * Creates new form Principal
      */
     public Principal() {
         initComponents();
+        controladorTabla = new HandlerTable();
         factory = Persistence.createEntityManagerFactory("GestorVisitasMuseoPU");
+        jpa = new VisitaJpaController(factory);
         txtObservaciones.setEnabled(false);
         txtFecha.setEnabled(false);
         txtHora.setEnabled(false);
+        
+        /*Para centrar la ventana*/
+        Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
+//obtenemos el tamaño de la ventana
+        Dimension ventana = this.getSize();
+//para centrar la ventana lo hacemos con el siguiente calculo
+        this.setLocation((pantalla.width-ventana.width)/2, (pantalla.height-ventana.height)/2);
+//y para finalizar la hacemos visible
+        this.setVisible(true);
+
     }
 
     /**
@@ -67,11 +84,15 @@ public class Principal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         txtHora = new javax.swing.JTextField();
         btnGuardarVisita = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblConsultas = new javax.swing.JTable();
         btnConsultarTodas = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        lblImagenLogo1 = new javax.swing.JLabel();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -87,15 +108,15 @@ public class Principal extends javax.swing.JFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Casa Museo Guillermo León Valencia", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Verdana", 0, 11))); // NOI18N
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        lblImagenLogo.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian V\\Desktop\\logomuseo.png")); // NOI18N
-        jPanel2.add(lblImagenLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 17, -1, 96));
+        lblImagenLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/museo.png"))); // NOI18N
+        jPanel2.add(lblImagenLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 17, -1, 80));
 
-        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 20)); // NOI18N
         jLabel6.setText("Casa Museo Guillermo León Valencia");
         jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(198, 28, -1, -1));
 
         jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 19, 85));
+        jPanel2.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, 10, 70));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         jLabel7.setText("Teléfono: +57 (2) 824 1555 ");
@@ -113,7 +134,7 @@ public class Principal extends javax.swing.JFrame {
 
         jLabel2.setText("Número de visitantes:");
 
-        spinNumeroPersonas.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+        spinNumeroPersonas.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
 
         cbBoxGrupoSocial.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Niño", "Joven", "Adulto", "Adulto Mayor" }));
 
@@ -157,11 +178,11 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jSeparator2)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnGuardarVisita)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
                         .addComponent(jLabel2)
                         .addGap(8, 8, 8)
                         .addComponent(spinNumeroPersonas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -176,8 +197,9 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 76, Short.MAX_VALUE))
+                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnGuardarVisita))
+                .addGap(0, 141, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,63 +218,70 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(checkComentarios))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardarVisita)
-                .addGap(38, 38, 38))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Registro de ingreso de visitantes", jPanel1);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel5.setText("Consultar visitas desde:");
+        jLabel5.setText("Consultar visitas:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblConsultas.setAutoCreateRowSorter(true);
+        tblConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(tblConsultas);
 
         btnConsultarTodas.setText("Consultar");
+        btnConsultarTodas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarTodasActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(108, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnConsultarTodas)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel5))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnConsultarTodas)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(15, 15, 15)
+                        .addComponent(jLabel5)))
+                .addGap(0, 631, Short.MAX_VALUE))
+            .addComponent(jScrollPane3)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
+                .addContainerGap(47, Short.MAX_VALUE)
                 .addComponent(jLabel5)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnConsultarTodas)
-                .addContainerGap())
+                .addGap(20, 20, 20))
         );
 
         jTabbedPane1.addTab("Consultas y Reportes", jPanel3);
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel10.setText("Matriz Control de Ingreso de Visitantes");
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Escudo.png"))); // NOI18N
+
+        lblImagenLogo1.setIcon(new javax.swing.ImageIcon("C:\\Users\\Sebastian V\\Desktop\\logomuseo.png")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -264,14 +293,34 @@ public class Principal extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTabbedPane1))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
+                .addComponent(jLabel11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 360, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblImagenLogo1)
+                        .addGap(83, 83, 83))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImagenLogo1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel11))
+                .addGap(18, 18, 18)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -289,6 +338,10 @@ public class Principal extends javax.swing.JFrame {
     private void btnGuardarVisitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarVisitaActionPerformed
         logicaGuardar();
     }//GEN-LAST:event_btnGuardarVisitaActionPerformed
+
+    private void btnConsultarTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarTodasActionPerformed
+        logicaConsultaTotal();
+    }//GEN-LAST:event_btnConsultarTodasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -331,6 +384,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbBoxGrupoSocial;
     private javax.swing.JCheckBox checkComentarios;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -347,10 +402,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblImagenLogo;
+    private javax.swing.JLabel lblImagenLogo1;
     private javax.swing.JSpinner spinNumeroPersonas;
+    private javax.swing.JTable tblConsultas;
     private javax.swing.JTextField txtFecha;
     private javax.swing.JTextField txtHora;
     private javax.swing.JTextArea txtObservaciones;
@@ -399,9 +456,9 @@ public class Principal extends javax.swing.JFrame {
         try {
 
             System.out.println("se va a insertar: " + visitaNueva);
-            VisitaJpaController jpa = new VisitaJpaController(factory);
             jpa.create(visitaNueva);
-            JOptionPane.showMessageDialog(this, "Se ha guardado correctamente la visita.");
+            JOptionPane.showMessageDialog(this, "Se ha guardado correctamente la visita. \nResumen:\n"
+                    + visitaNueva.toString());
 
             System.out.println("Visitas registradas hasta el momento:");
             List<Visita> visitas = jpa.findVisitaEntities();
@@ -411,5 +468,11 @@ public class Principal extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Ha ocurrido un error, contacte al proveedor.");
         }
+    }
+
+    private void logicaConsultaTotal() {
+        //List<Visita> datos = jpa.findVisitaEntities();
+        controladorTabla.cargarTabla(tblConsultas);
+        //tblConsultas.removeAll();
     }
 }
