@@ -60,7 +60,6 @@ public class Visita implements Serializable {
     private String observaciones;
 
     public Visita() {
-        System.out.println("sdfd");
     }
 
     public Visita(Long id) {
@@ -144,7 +143,7 @@ public class Visita implements Serializable {
 
     @Override
     public String toString() {
-        return "com.unicauca.gestorgisitasmuseo.entities.Visita[ id=" + id + " ]";
+        return "id: "+id+" #: "+numeropersonas+" Tipo: "+tipovisitante+" Fecha: "+fecha+" Hora: "+hora+" Observaciones: "+observaciones;
     }
     
 }
