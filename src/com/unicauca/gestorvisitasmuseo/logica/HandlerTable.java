@@ -30,10 +30,10 @@ public class HandlerTable {
         jpa = new VisitaJpaController(factory);
     }
 
-    public void cargarTabla(JTable tabla) {
+    public void ejecutarConsultaGeneral(JTable tabla) {
         
         List<Visita> resultConsulta = jpa.findVisitaEntities();
-        String[] columnas = {"ID", "Visitantes", "Grupo Social", "Fecha (d/m/a)", "Hora", "Observaciones"};
+        String[] columnas = {"ID", "Visitantes", "Grupo Social", "Fecha (dd/mm/aaaa)", "Hora", "Observaciones"};
         DefaultTableModel dm = new DefaultTableModel(null, columnas);
 //        TableColumnModel columnModel = tabla.getColumnModel();
 //        columnModel.getColumn(0).setPreferredWidth(10);

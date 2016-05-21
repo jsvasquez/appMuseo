@@ -242,7 +242,7 @@ public class Principal extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblConsultas);
 
-        btnConsultarTodas.setText("Consultar");
+        btnConsultarTodas.setText("Consultar todas las visitas");
         btnConsultarTodas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConsultarTodasActionPerformed(evt);
@@ -253,25 +253,24 @@ public class Principal extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 729, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConsultarTodas)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel5)))
-                .addGap(0, 631, Short.MAX_VALUE))
-            .addComponent(jScrollPane3)
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnConsultarTodas)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(47, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
+                .addGap(19, 19, 19)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(btnConsultarTodas))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnConsultarTodas)
-                .addGap(20, 20, 20))
+                .addGap(54, 54, 54))
         );
 
         jTabbedPane1.addTab("Consultas y Reportes", jPanel3);
@@ -471,8 +470,6 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void logicaConsultaTotal() {
-        //List<Visita> datos = jpa.findVisitaEntities();
-        controladorTabla.cargarTabla(tblConsultas);
-        //tblConsultas.removeAll();
+        controladorTabla.ejecutarConsultaGeneral(tblConsultas);
     }
 }
