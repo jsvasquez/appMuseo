@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
@@ -134,5 +135,22 @@ public class VisitaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public List<Visita> findVisitaObservaciones(String cadena) {
+        EntityManager em = emf.createEntityManager();
+
+        TypedQuery<Visita> consulta = em.createNamedQuery("Visita.findByObservaciones", Visita.class);
+        consulta.setParameter("observaciones", cadena);
+
+        List<Visita> resultado = consulta.getResultList();
+
+        System.out.println("(\"**************************\");");
+        System.out.println("Resultado de la búsqueda:");
+        for (int i = 0; i < resultado.size(); i++) {
+            System.out.println(resultado.get(i));
+        }
+        return resultado;
+
+    }
+
 }

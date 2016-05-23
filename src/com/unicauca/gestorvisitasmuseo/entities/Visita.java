@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Visita.findByHora", query = "SELECT v FROM Visita v WHERE v.hora = :hora"),
     @NamedQuery(name = "Visita.findByTipovisitante", query = "SELECT v FROM Visita v WHERE v.tipovisitante = :tipovisitante"),
     @NamedQuery(name = "Visita.findByNumeropersonas", query = "SELECT v FROM Visita v WHERE v.numeropersonas = :numeropersonas"),
-    @NamedQuery(name = "Visita.findByObservaciones", query = "SELECT v FROM Visita v WHERE v.observaciones = :observaciones")})
+    @NamedQuery(name = "Visita.findByObservaciones", query = "SELECT v FROM Visita v WHERE lower(v.observaciones) LIKE :observaciones")})
 public class Visita implements Serializable {
 
     private static final long serialVersionUID = 1L;
