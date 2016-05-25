@@ -8,6 +8,7 @@ package com.unicauca.gestorvisitasmuseo.dao;
 import com.unicauca.gestorvisitasmuseo.dao.exceptions.NonexistentEntityException;
 import com.unicauca.gestorvisitasmuseo.entities.Visita;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -153,4 +154,22 @@ public class VisitaJpaController implements Serializable {
 
     }
 
+    public List<Visita> findVisitasPorFecha(Date fInicio, Date fFin) {
+        EntityManager em = emf.createEntityManager();
+
+        TypedQuery<Visita> consulta = em.createNamedQuery("Visita.findByFecha", Visita.class);
+        consulta.setParameter("fechaIni", fInicio);
+        consulta.setParameter("fechaFin", fFin);
+
+        List<Visita> resultado = consulta.getResultList();
+
+        /*System.out.println("(\"**************************\");");
+        System.out.println("Resultado de la búsqueda:");
+        for (int i = 0; i < resultado.size(); i++) {
+            System.out.println(resultado.get(i));
+        }*/
+        return resultado;
+    }
+
+  
 }
