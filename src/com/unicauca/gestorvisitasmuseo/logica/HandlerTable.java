@@ -28,6 +28,13 @@ public class HandlerTable {
         factory = Persistence.createEntityManagerFactory("GestorVisitasMuseoPU");
         jpa = new VisitaJpaController(factory);
     }
+    
+    public void puedeAcceder() {
+        Visita resultConsulta;
+        
+        resultConsulta = jpa.findVisita(Long.MIN_VALUE);
+
+    }
 
     public boolean ejecutarConsulta(JTable tabla, int consulta, String clave) {
         List<Visita> resultConsulta;
@@ -61,7 +68,9 @@ public class HandlerTable {
             return false;
         }
     }
-
+    
+    
+    
     private String[] convertirAVector(Visita get) {
 
         String[] vec = {"" + get.getId(), "" + get.getNumeropersonas(), get.getTipovisitante(), get.getFechaSimple(), get.getHoraSimple(), get.getObservaciones()};
@@ -95,40 +104,39 @@ public class HandlerTable {
 
     public List<Integer> contarVisitasFechas(Date fInicio, Date fFin) {
         List<Visita> resultConsulta;
-        int niños=0,joven=0,adulto=0,adultoMayor=0;
-        
+        int niños = 0, joven = 0, adulto = 0, adultoMayor = 0;
+
         System.out.println("Inicio: " + fInicio);
         System.out.println("Fin: " + fFin);
 
         resultConsulta = jpa.findVisitasPorFecha(fInicio, fFin);
 
         //if (resultConsulta.size() > 0) {
+        for (int i = 0; i < resultConsulta.size(); i++) {
+            Visita aux = resultConsulta.get(i);
+            String grupo = aux.getTipovisitante();
+            switch (grupo) {
+                case "Niño":
+                    niños += aux.getNumeropersonas();
+                    break;
+                case "Joven":
+                    joven += aux.getNumeropersonas();
+                    break;
+                case "Adulto":
+                    adulto += aux.getNumeropersonas();
+                    break;
+                case "Adulto Mayor":
+                    adultoMayor += aux.getNumeropersonas();
+                    break;
 
-            for (int i = 0; i < resultConsulta.size(); i++) {
-                Visita aux = resultConsulta.get(i);
-                String grupo = aux.getTipovisitante();
-                switch (grupo) {
-                    case "Niño":
-                        niños+=aux.getNumeropersonas();
-                        break;
-                    case "Joven":
-                        joven+=aux.getNumeropersonas();
-                        break;
-                    case "Adulto":
-                        adulto+=aux.getNumeropersonas();
-                        break;
-                    case "Adulto Mayor":
-                        adultoMayor+=aux.getNumeropersonas();
-                        break;
-
-                }
             }
-            List<Integer> conteos = new ArrayList<>();
-            conteos.add(niños);
-            conteos.add(joven);
-            conteos.add(adulto);
-            conteos.add(adultoMayor);
-            return conteos;
+        }
+        List<Integer> conteos = new ArrayList<>();
+        conteos.add(niños);
+        conteos.add(joven);
+        conteos.add(adulto);
+        conteos.add(adultoMayor);
+        return conteos;
 //        } else {
 //            return null;
 //        }

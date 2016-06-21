@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.unicauca.gestorvisitasmuseo.presentación;
+package com.unicauca.gestorvisitasmuseo.presentation;
 
 import com.unicauca.gestorvisitasmuseo.dao.VisitaJpaController;
 import com.unicauca.gestorvisitasmuseo.entities.Visita;
@@ -33,12 +33,15 @@ public class Principal extends javax.swing.JFrame {
      */
     public Principal() {
         initComponents();
+
         controladorTabla = new HandlerTable();
         factory = Persistence.createEntityManagerFactory("GestorVisitasMuseoPU");
         jpa = new VisitaJpaController(factory);
         txtObservaciones.setEnabled(false);
         txtFecha.setEnabled(false);
         txtHora.setEnabled(false);
+
+        verificarConexion();
 
         /*Para centrar la ventana*/
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -47,7 +50,7 @@ public class Principal extends javax.swing.JFrame {
 //para centrar la ventana lo hacemos con el siguiente calculo
         this.setLocation((pantalla.width - ventana.width) / 2, 0);
 //y para finalizar la hacemos visible
-        //this.setVisible(true);
+        this.setVisible(true);
 
     }
 
@@ -87,7 +90,6 @@ public class Principal extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblConsultas = new javax.swing.JTable();
-        btnConsultarTodas = new javax.swing.JButton();
         btnBuscarObservacion = new javax.swing.JButton();
         txtBuscarObservacion = new javax.swing.JTextField();
         btnLimpiar = new javax.swing.JButton();
@@ -103,6 +105,13 @@ public class Principal extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         lblImagenLogo1 = new javax.swing.JLabel();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        MenuItemConsultarTodo = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -192,9 +201,6 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(btnGuardarVisita))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addComponent(jLabel2)
                         .addGap(8, 8, 8)
@@ -210,7 +216,10 @@ public class Principal extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtHora, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnGuardarVisita, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(135, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -230,7 +239,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(checkComentarios)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnGuardarVisita)
@@ -252,13 +261,6 @@ public class Principal extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblConsultas);
 
-        btnConsultarTodas.setText("Mostrar todos los registros");
-        btnConsultarTodas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConsultarTodasActionPerformed(evt);
-            }
-        });
-
         btnBuscarObservacion.setText("Buscar");
         btnBuscarObservacion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -266,7 +268,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        btnLimpiar.setText("Limpiar tabla");
+        btnLimpiar.setText("Limpiar");
         btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLimpiarActionPerformed(evt);
@@ -298,60 +300,67 @@ public class Principal extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 749, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3)
+                .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(btnConsultarTodas)
-                .addGap(447, 447, 447)
-                .addComponent(btnLimpiar))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(8, 8, 8)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(9, 9, 9)
-                        .addComponent(txtBuscarObservacion, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(13, 13, 13)
-                        .addComponent(btnBuscarObservacion))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jDateFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(8, 8, 8)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
+                                .addComponent(jLabel5)
+                                .addGap(9, 9, 9)
+                                .addComponent(txtBuscarObservacion, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(13, 13, 13)
+                                .addComponent(btnBuscarObservacion))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel13)
+                                .addGap(18, 18, 18)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jDateFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(19, 19, 19)
-                                        .addComponent(jDateFechafin, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbxOpcionesFechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnConsultaFechas))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(47, 47, 47)
-                                .addComponent(jLabel15))))))
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGap(19, 19, 19)
+                                                .addComponent(jDateFechafin, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cbxOpcionesFechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnConsultaFechas))
+                                    .addGroup(jPanel3Layout.createSequentialGroup()
+                                        .addGap(47, 47, 47)
+                                        .addComponent(jLabel15))))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(269, 269, 269)
+                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(152, 180, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateFechafin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbxOpcionesFechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnConsultaFechas)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jDateFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateFechafin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cbxOpcionesFechas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnConsultaFechas)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -360,9 +369,7 @@ public class Principal extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(6, 6, 6)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnConsultarTodas)
-                    .addComponent(btnLimpiar)))
+                .addComponent(btnLimpiar))
         );
 
         jTabbedPane1.addTab("Consultas y Reportes", jPanel3);
@@ -373,6 +380,51 @@ public class Principal extends javax.swing.JFrame {
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/Escudo.png"))); // NOI18N
 
         lblImagenLogo1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/logomuseo.png"))); // NOI18N
+
+        jMenuBar1.setBackground(new java.awt.Color(0, 87, 255));
+        jMenuBar1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jMenu1.setText("Archivo");
+
+        MenuItemConsultarTodo.setText("Consultar todos los registros");
+        MenuItemConsultarTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItemConsultarTodoActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuItemConsultarTodo);
+
+        jMenuItem2.setText("Cerrar");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem2);
+
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Acerca de...");
+
+        jMenuItem1.setText("Versión Sistema Gestor Matriz Control de Ingreso de Visitantes");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem1);
+
+        jMenuItem3.setText("Contacto Proveedor - Desarrollador");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -435,13 +487,33 @@ public class Principal extends javax.swing.JFrame {
         logicaConsultarObservacion();
     }//GEN-LAST:event_btnBuscarObservacionActionPerformed
 
-    private void btnConsultarTodasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarTodasActionPerformed
-        logicaConsultaTotal();
-    }//GEN-LAST:event_btnConsultarTodasActionPerformed
-
     private void btnConsultaFechasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultaFechasActionPerformed
         logicaConsultasFecha();
     }//GEN-LAST:event_btnConsultaFechasActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        String mj = "\tSistema Gestor de Matriz Control de Ingreso de Visitantes\n"
+                + "\tVersión 1.1\n"
+                + "Casa Museo Guillermo León Valencia";
+        JOptionPane.showMessageDialog(this, mj, "Versión de sistema", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        String mj = "Desarrollado por:\n"
+                + "Juan Sebastián Vásquez (jsvasquez@unicauca.edu.co)\n"
+                + "Cel: 312 203 7795\n"
+                + "Gestor Matriz Control de Ingreso de Visitantes";
+        JOptionPane.showMessageDialog(this, mj, "Datos de contacto", JOptionPane.INFORMATION_MESSAGE);
+
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void MenuItemConsultarTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItemConsultarTodoActionPerformed
+        logicaConsultaTotal();
+    }//GEN-LAST:event_MenuItemConsultarTodoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -479,9 +551,9 @@ public class Principal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenuItemConsultarTodo;
     private javax.swing.JButton btnBuscarObservacion;
     private javax.swing.JButton btnConsultaFechas;
-    private javax.swing.JButton btnConsultarTodas;
     private javax.swing.JButton btnGuardarVisita;
     private javax.swing.JButton btnLimpiar;
     private javax.swing.JComboBox<String> cbBoxGrupoSocial;
@@ -505,6 +577,12 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JList<String> jList1;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -568,33 +646,51 @@ public class Principal extends javax.swing.JFrame {
 
             System.out.println("se va a insertar: " + visitaNueva);
             jpa.create(visitaNueva);
-            JOptionPane.showMessageDialog(this, "Se ha guardado correctamente la visita. \nResumen:\n"
-                    + visitaNueva.toString());
+            JOptionPane.showMessageDialog(this, "Resumen:\n" + visitaNueva.toString(), "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
 
-            System.out.println("Visitas registradas hasta el momento:");
-            List<Visita> visitas = jpa.findVisitaEntities();
-            for (int i = 0; i < visitas.size(); i++) {
-                System.out.println(visitas.get(i));
-            }
+//            System.out.println("Visitas registradas hasta el momento:");
+//            List<Visita> visitas = jpa.findVisitaEntities();
+//            for (int i = 0; i < visitas.size(); i++) {
+//                System.out.println(visitas.get(i));
+//            }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Ha ocurrido un error, contacte al proveedor.");
+
+            JOptionPane.showMessageDialog(this, "Verifique que la base de datos esté iniciada.\n"
+                    + "\nSi persiste, contacte al proveedor.\n"
+                    + "Detalles de error: \n" + e.getMessage(),
+                    "Ha ocurrido un error", JOptionPane.ERROR_MESSAGE);
+
+            JOptionPane.showMessageDialog(this, "\tRecuerde registrar nuevamente esta visita.", "Visita no registrada", JOptionPane.ERROR_MESSAGE);
+
         }
     }
 
     private void logicaConsultaTotal() {
-        if (!controladorTabla.ejecutarConsulta(tblConsultas, 1, null)) {
-            JOptionPane.showMessageDialog(this, "No se han encontrado registros.");
+        try {
+            if (!controladorTabla.ejecutarConsulta(tblConsultas, 1, null)) {
+                JOptionPane.showMessageDialog(this, "No se han encontrado registros aún en el sistema.", "No hay registros", JOptionPane.INFORMATION_MESSAGE);
+            }
+
+        } catch (Exception e) {
+            String mj = "Detalle de error:\n" + e.getMessage();
+            JOptionPane.showMessageDialog(this, mj, "Error", JOptionPane.ERROR_MESSAGE);
         }
+
     }
 
     private void logicaConsultarObservacion() {
-        String criterio = txtBuscarObservacion.getText().toLowerCase().trim();
-        if (!criterio.equals("")) {
-            if (!controladorTabla.ejecutarConsulta(tblConsultas, 2, criterio)) {
-                JOptionPane.showMessageDialog(this, "No se han encontrado registros relacionados.");
+        try {
+            String criterio = txtBuscarObservacion.getText().toLowerCase().trim();
+            if (!criterio.equals("")) {
+                if (!controladorTabla.ejecutarConsulta(tblConsultas, 2, criterio)) {
+                    JOptionPane.showMessageDialog(this, "No se han encontrado registros relacionados.", "", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "El campo de búsqueda no puede estar vacío.\nPor favor intente nuevamente.", "", JOptionPane.INFORMATION_MESSAGE);
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "El campo de búsqueda no puede estar vacío.\nPor favor intente nuevamente.");
+        } catch (Exception e) {
+            String mj = "Error: Contacte al adeministrador.";
+            JOptionPane.showMessageDialog(this, mj, "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -607,13 +703,14 @@ public class Principal extends javax.swing.JFrame {
         Date fInicio = jDateFechaIni.getDate();
         Date fFin = jDateFechafin.getDate();
         if (fInicio == null) {
-            JOptionPane.showMessageDialog(this, "Las fecha inicial es requerida. \nNo puede estar vacía o incompleta.");
+            JOptionPane.showMessageDialog(this, "Las fecha inicial es requerida. \nNo puede estar vacía o incompleta.", "Intente nuevamente", JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (fFin == null) {
                 fFin = new Date();
             }
+
             if (!controladorTabla.consultarFechas(tblConsultas, fInicio, fFin)) {
-                JOptionPane.showMessageDialog(this, "No se han encontrado registros entre las fechas ingresadas.");
+                JOptionPane.showMessageDialog(this, "No se han encontrado registros entre "+normalizarFecha(fInicio)+" y "+normalizarFecha(fFin)+".", "", JOptionPane.INFORMATION_MESSAGE);
             }
         }
 
@@ -623,27 +720,62 @@ public class Principal extends javax.swing.JFrame {
         Date fInicio = jDateFechaIni.getDate();
         Date fFin = jDateFechafin.getDate();
         if (fInicio == null) {
-            JOptionPane.showMessageDialog(this, "Las fecha inicial es requerida. \nNo puede estar vacía o incompleta.");
+            JOptionPane.showMessageDialog(this, "Las fecha inicial es requerida. \nNo puede estar vacía o incompleta.", "Intente nuevamente", JOptionPane.INFORMATION_MESSAGE);
         } else {
             if (fFin == null) {
                 fFin = new Date();
             }
             List<Integer> conteos = controladorTabla.contarVisitasFechas(fInicio, fFin);
-            JOptionPane.showMessageDialog(this, "A continuación se presenta el resumen de visitas entre las fechas indicadas "
-                    + "clasificadas por tipo de visitante.\n"
+
+            JOptionPane.showMessageDialog(this, "A continuación se presenta el resumen de visitas entre " + normalizarFecha(fInicio) + " y " + normalizarFecha(fFin) + " clasificadas por tipo de visitante.\n"
                     + "\nNiño: " + conteos.get(0)
                     + "\nJoven: " + conteos.get(1)
                     + "\nAdulto: " + conteos.get(2)
-                    + "\nAdulto Mayor: " + conteos.get(3));
+                    + "\nAdulto Mayor: " + conteos.get(3), "Resumen de visitas", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
     private void logicaConsultasFecha() {
-        System.out.println(cbxOpcionesFechas.getSelectedIndex());
-        if (cbxOpcionesFechas.getSelectedIndex() == 0) {
-            logicaConsultarFechas();
-        } else if (cbxOpcionesFechas.getSelectedIndex() == 1) {
-            logicaContarVisitasFechas();
+        try {
+            System.out.println(cbxOpcionesFechas.getSelectedIndex());
+            if (cbxOpcionesFechas.getSelectedIndex() == 0) {
+                logicaConsultarFechas();
+            } else if (cbxOpcionesFechas.getSelectedIndex() == 1) {
+                logicaContarVisitasFechas();
+            }
+        } catch (Exception e) {
+            String mj = "Error: Contacte al adeministrador.";
+            JOptionPane.showMessageDialog(this, mj, "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void verificarConexion() {
+
+        try {
+            controladorTabla.puedeAcceder();
+        } catch (Exception e) {
+            String mj = "Base de datos no iniciada.\n"
+                    + "Recuerda iniciar el servicio de base de datos para utilizar el aplicativo, de lo contrario no funcionará correctamente.\n";
+            JOptionPane.showMessageDialog(this, mj, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public String normalizarFecha(Date fechaBruta) {
+        Calendar fechaLista = Calendar.getInstance();
+        fechaLista.setTime(fechaBruta);
+        int d = fechaLista.get(Calendar.DAY_OF_MONTH);
+        int m = (fechaLista.get(Calendar.MONTH) + 1);
+        String anio = "" + fechaLista.get(Calendar.YEAR);
+
+        String dia = "" + d;
+        if (d < 10) {
+            dia = "0" + d;
+        }
+        String mes = "" + m;
+        if (m < 10) {
+            mes = "0" + m;
+        }
+
+        return dia + "/" + mes + "/" + anio;
     }
 }
